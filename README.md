@@ -1,8 +1,11 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+## Quick Start (Windows)
 
-First, run the development server:
+- To view the **Public Site**, double-click the `start-public.bat` file in the root directory. This will start the dev server and open your browser to the public homepage (`http://localhost:3000/`).
+- To view the **Admin Portal**, double-click the `start.bat` file. This will start the dev server, print credentials, and open your browser to the admin login gateway (`http://localhost:3000/admin`).
+
+Alternatively, run manually:
 
 ```bash
 npm run dev
