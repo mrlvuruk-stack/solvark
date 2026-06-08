@@ -1,10 +1,12 @@
 const { PrismaClient } = require('@prisma/client');
-const { PrismaLibSql } = require('@prisma/adapter-libsql');
-const bcrypt = require('bcrypt');
+const { PrismaLibSQL } = require('@prisma/adapter-libsql');
+const { createClient } = require('@libsql/client');
+const bcrypt = require('bcryptjs');
 
-const adapter = new PrismaLibSql({
+const client = createClient({
   url: 'file:./dev.db',
 });
+const adapter = new PrismaLibSQL(client);
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
@@ -39,9 +41,9 @@ async function main() {
   const settings = await prisma.websiteSettings.create({
     data: {
       site_name: 'Solvark',
-      contact_email: 'hello@solvark.com',
-      contact_phone: '+91 98765 43210',
-      address: '4th Floor, Tech Hub, HSR Layout, Bangalore, India',
+      contact_email: 'mrlv.uruk@gmail.com',
+      contact_phone: '+91 91094 75522',
+      address: 'Phoenix Township, Dewas Naka, Indore, India',
       social_links: {
         twitter: 'https://twitter.com/solvark',
         linkedin: 'https://linkedin.com/company/solvark',

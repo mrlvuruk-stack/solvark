@@ -50,23 +50,23 @@ export default async function ContactPage() {
             </div>
 
             <div className="flex flex-col gap-5 text-sm">
-              <a href="mailto:hello@solvark.com" className="flex items-center gap-3.5 hover:text-white transition-colors group">
+              <a href="mailto:mrlv.uruk@gmail.com" className="flex items-center gap-3.5 hover:text-white transition-colors group">
                 <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-brand-accent group-hover:border-brand-accent/20 transition-all">
                   <Mail className="w-4 h-4" />
                 </div>
                 <div>
                   <h4 className="text-xs text-brand-gray-500 font-mono">Email Address</h4>
-                  <span className="text-white font-medium">hello@solvark.com</span>
+                  <span className="text-white font-medium">mrlv.uruk@gmail.com</span>
                 </div>
               </a>
 
-              <a href="tel:+919876543210" className="flex items-center gap-3.5 hover:text-white transition-colors group">
+              <a href="tel:+919109475522" className="flex items-center gap-3.5 hover:text-white transition-colors group">
                 <div className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-brand-accent group-hover:border-brand-accent/20 transition-all">
                   <Phone className="w-4 h-4" />
                 </div>
                 <div>
                   <h4 className="text-xs text-brand-gray-500 font-mono">Direct Phone</h4>
-                  <span className="text-white font-medium">+91 98765 43210</span>
+                  <span className="text-white font-medium">+91 91094 75522</span>
                 </div>
               </a>
 
@@ -76,7 +76,7 @@ export default async function ContactPage() {
                 </div>
                 <div>
                   <h4 className="text-xs text-brand-gray-500 font-mono">Headquarters</h4>
-                  <span className="text-white font-medium">HSR Layout, Bangalore, India</span>
+                  <span className="text-white font-medium">Phoenix Township, Dewas Naka, Indore</span>
                 </div>
               </div>
 

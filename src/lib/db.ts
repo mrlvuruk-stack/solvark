@@ -20,9 +20,9 @@ const mockUsers = [
 const mockSettings = {
   id: "settings-id",
   site_name: "Solvark",
-  contact_email: "hello@solvark.com",
-  contact_phone: "+91 98765 43210",
-  address: "4th Floor, Tech Hub, HSR Layout, Bangalore, India",
+  contact_email: "mrlv.uruk@gmail.com",
+  contact_phone: "+91 91094 75522",
+  address: "Phoenix Township, Dewas Naka, Indore, India",
   social_links: {
     twitter: "https://twitter.com/solvark",
     linkedin: "https://linkedin.com/company/solvark",

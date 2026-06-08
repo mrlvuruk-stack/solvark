@@ -118,18 +118,18 @@ export default function Footer() {
               Contact
             </span>
             <div className="flex flex-col gap-4 text-sm">
-              <a href="mailto:hello@solvark.com" className="flex items-center gap-2.5 hover:text-white transition-colors">
+              <a href="mailto:mrlv.uruk@gmail.com" className="flex items-center gap-2.5 hover:text-white transition-colors">
                 <Mail className="w-4 h-4 text-brand-accent" />
-                hello@solvark.com
+                mrlv.uruk@gmail.com
               </a>
-              <a href="tel:+919876543210" className="flex items-center gap-2.5 hover:text-white transition-colors">
+              <a href="tel:+919109475522" className="flex items-center gap-2.5 hover:text-white transition-colors">
                 <Phone className="w-4 h-4 text-brand-accent" />
-                +91 98765 43210
+                +91 91094 75522
               </a>
               <div className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-brand-accent mt-1 flex-shrink-0" />
                 <span className="leading-relaxed">
-                  Tech Hub, HSR Layout, Bangalore, India
+                  Phoenix Township, Dewas Naka, Indore, India
                 </span>
               </div>
             </div>
