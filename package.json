@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build --webpack",
+    "build": "prisma generate && next build --webpack",
     "start": "next start",
     "lint": "eslint",
     "build:cloudflare": "opennextjs-cloudflare build && node -e \"const fs = require('fs'); fs.copyFileSync('.open-next/worker.js', '.open-next/assets/_worker.js')\"",
