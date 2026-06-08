@@ -442,66 +442,78 @@ function getDb(): PrismaClient {
     return mockClient;
   }
 
-  let client;
-  if (url.startsWith("file:")) {
-    // In Node.js (build/next dev), require the native client to support local SQLite files
-    const { createClient: createNodeClient } = require("@libsql/client");
-    client = createNodeClient({ url });
-  } else {
-    // In Cloudflare Worker or remote, use the web-compatible client
-    const { createClient: createWebClient } = require("@libsql/client/web");
-    client = createWebClient({ url, authToken });
-  }
-
-  const { PrismaLibSQL } = require("@prisma/adapter-libsql");
-  const adapter = new PrismaLibSQL(client);
-  const prismaClient = new PrismaClient({ adapter });
-
-  // Wrap the real client in a proxy to catch connection timeouts or query errors gracefully
-  const resilientClient = new Proxy(prismaClient, {
-    get(target, prop) {
-      if (typeof prop === "string" && !prop.startsWith("$")) {
-        const modelMethods = (target as any)[prop];
-        if (modelMethods) {
-          return new Proxy(modelMethods, {
-            get(methodsTarget, methodProp) {
-              const originalMethod = (methodsTarget as any)[methodProp];
-              if (typeof originalMethod === "function") {
-                return async function (...args: any[]) {
-                  try {
-                    return await originalMethod.apply(methodsTarget, args);
-                  } catch (err) {
-                    console.error(`[Resilient DB] Database query failed for ${prop}.${String(methodProp)}:`, err);
-                    console.warn(`[Resilient DB] Falling back to mock database client...`);
-                    const mockClient = createMockPrismaClient();
-                    const mockModelMethods = (mockClient as any)[prop];
-                    if (mockModelMethods && typeof mockModelMethods[methodProp] === "function") {
-                      return await mockModelMethods[methodProp].apply(mockModelMethods, args);
-                    }
-                    throw err;
-                  }
-                };
-              }
-              return originalMethod;
-            }
-          });
-        }
-      }
-      const val = (target as any)[prop];
-      if (typeof val === "function") {
-        return val.bind(target);
-      }
-      return val;
+  try {
+    let client;
+    if (url.startsWith("file:")) {
+      // In Node.js (build/next dev), require the native client to support local SQLite files
+      const { createClient: createNodeClient } = require("@libsql/client");
+      client = createNodeClient({ url });
+    } else {
+      // In Cloudflare Worker or remote, use the web-compatible client
+      const { createClient: createWebClient } = require("@libsql/client/web");
+      client = createWebClient({ url, authToken });
     }
-  });
 
-  if (cfCtx) {
-    clientsMap.set(cfCtx, resilientClient);
-  } else {
-    globalPrisma = resilientClient;
+    const { PrismaLibSQL } = require("@prisma/adapter-libsql");
+    const adapter = new PrismaLibSQL(client);
+    const prismaClient = new PrismaClient({ adapter });
+
+    // Wrap the real client in a proxy to catch connection timeouts or query errors gracefully
+    const resilientClient = new Proxy(prismaClient, {
+      get(target, prop) {
+        if (typeof prop === "string" && !prop.startsWith("$")) {
+          const modelMethods = (target as any)[prop];
+          if (modelMethods) {
+            return new Proxy(modelMethods, {
+              get(methodsTarget, methodProp) {
+                const originalMethod = (methodsTarget as any)[methodProp];
+                if (typeof originalMethod === "function") {
+                  return async function (...args: any[]) {
+                    try {
+                      return await originalMethod.apply(methodsTarget, args);
+                    } catch (err) {
+                      console.error(`[Resilient DB] Database query failed for ${prop}.${String(methodProp)}:`, err);
+                      console.warn(`[Resilient DB] Falling back to mock database client...`);
+                      const mockClient = createMockPrismaClient();
+                      const mockModelMethods = (mockClient as any)[prop];
+                      if (mockModelMethods && typeof mockModelMethods[methodProp] === "function") {
+                        return await mockModelMethods[methodProp].apply(mockModelMethods, args);
+                      }
+                      throw err;
+                    }
+                  };
+                }
+                return originalMethod;
+              }
+            });
+          }
+        }
+        const val = (target as any)[prop];
+        if (typeof val === "function") {
+          return val.bind(target);
+        }
+        return val;
+      }
+    });
+
+    if (cfCtx) {
+      clientsMap.set(cfCtx, resilientClient);
+    } else {
+      globalPrisma = resilientClient;
+    }
+
+    return resilientClient;
+  } catch (initErr) {
+    console.error("[getDb] Error initializing Prisma client:", initErr);
+    console.warn("[getDb] Falling back to mock database client due to initialization failure.");
+    const mockClient = createMockPrismaClient();
+    if (cfCtx) {
+      clientsMap.set(cfCtx, mockClient);
+    } else {
+      globalPrisma = mockClient;
+    }
+    return mockClient;
   }
-
-  return resilientClient;
 }
 
 export const db = new Proxy({} as any, {
